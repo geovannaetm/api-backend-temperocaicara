@@ -1,7 +1,6 @@
 import express from 'express'
-
 import cors from 'cors'
-
+import userRouter from "./routers/userRouter.js";
 
 
 const app = express()
@@ -12,7 +11,8 @@ app.use(cors())
 app.use(express.json())
 
 
-//routers.....
+// Rotas
+app.use("/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
