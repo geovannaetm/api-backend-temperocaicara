@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -12,4 +6,106 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model adm {
+  id_adm           Int                @id @default(autoincrement())
+  email            String             @unique(map: "email_UNIQUE") @db.VarChar(100)
+  nome             String             @db.VarChar(200)
+  cpf              String             @db.Char(11)
+  pass             String             @db.VarChar(45)
+  estabelecimentos estabelecimentos[]
+}
+
+model cart {
+  id_cart         Int               @id @default(autoincrement())
+  user_id         Int
+  user            user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cart_user1")
+  cart_has_pratos cart_has_pratos[]
+
+  @@index([user_id], map: "fk_cart_user1_idx")
+}
+
+model cart_has_pratos {
+  cart_id_cart Int
+  pratos_id    Int
+  quantidade   Int
+  cart         cart   @relation(fields: [cart_id_cart], references: [id_cart], onDelete: NoAction, onUpdate: NoAction, map: "fk_cart_has_pratos_cart1")
+  pratos       pratos @relation(fields: [pratos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cart_has_pratos_pratos1")
+
+  @@id([cart_id_cart, pratos_id])
+  @@index([cart_id_cart], map: "fk_cart_has_pratos_cart1_idx")
+  @@index([pratos_id], map: "fk_cart_has_pratos_pratos1_idx")
+}
+
+model estabelecimentos {
+  id         Int       @id @default(autoincrement())
+  nome       String    @db.VarChar(200)
+  decricao   String    @db.VarChar(300)
+  logo_url   String    @db.VarChar(1000)
+  adm_id_adm Int
+  numero     String    @db.Char(5)
+  adm        adm       @relation(fields: [adm_id_adm], references: [id_adm], onDelete: NoAction, onUpdate: NoAction, map: "fk_estabelecimentos_adm1")
+  imagens    imagens[]
+  pratos     pratos[]
+
+  @@index([adm_id_adm], map: "fk_estabelecimentos_adm1_idx")
+}
+
+model imagens {
+  id                  Int              @id @default(autoincrement())
+  caminho             String           @db.VarChar(1000)
+  estabelecimentos_id Int
+  estabelecimentos    estabelecimentos @relation(fields: [estabelecimentos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_imagens_estabelecimentos")
+
+  @@index([estabelecimentos_id], map: "fk_imagens_estabelecimentos_idx")
+}
+
+model order {
+  id_order         Int                @id @default(autoincrement())
+  user_id          Int
+  user             user               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_user1")
+  order_has_pratos order_has_pratos[]
+
+  @@index([user_id], map: "fk_order_user1_idx")
+}
+
+model order_has_pratos {
+  order_id_order Int
+  quantidade     Int
+  pratos_id      Int
+  order          order  @relation(fields: [order_id_order], references: [id_order], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_has_pratos_order1")
+  pratos         pratos @relation(fields: [pratos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_has_pratos_pratos1")
+
+  @@id([order_id_order, pratos_id])
+  @@index([order_id_order], map: "fk_order_has_pratos_order1_idx")
+  @@index([pratos_id], map: "fk_order_has_pratos_pratos1_idx")
+}
+
+model pratos {
+  id                  Int                @id @default(autoincrement())
+  nome                String             @db.VarChar(45)
+  descricao           String             @db.VarChar(300)
+  preco               Decimal            @db.Decimal(10, 2)
+  categoria           String             @db.VarChar(30)
+  imagem              String             @db.VarChar(500)
+  estabelecimentos_id Int
+  destaque            Int                @db.TinyInt
+  cart_has_pratos     cart_has_pratos[]
+  order_has_pratos    order_has_pratos[]
+  estabelecimentos    estabelecimentos   @relation(fields: [estabelecimentos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pratos_estabelecimentos1")
+
+  @@index([estabelecimentos_id], map: "fk_pratos_estabelecimentos1_idx")
+}
+
+model user {
+  id     Int     @id @default(autoincrement())
+  name   String  @db.VarChar(200)
+  email  String  @unique(map: "email_UNIQUE") @db.VarChar(100)
+  pass   String  @db.VarChar(45)
+  bairro String  @db.VarChar(100)
+  rua    String  @db.VarChar(100)
+  numero String  @db.Char(5)
+  cart   cart[]
+  order  order[]
 }
