@@ -1,10 +1,19 @@
 import { PrismaClient } from "../generated/prisma/index.js";
 const prisma = new PrismaClient();
 
-export const createUser = async (data) => {
-  return await prisma.user.create({ data });
+export const create = async (userData) => {
+  return await prisma.user.create({
+    data: userData,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      bairro: true,
+      rua: true,
+      numero: true
+    }
+  });
 };
-
 
 
 export const getUserByEmail = async (email) => {
