@@ -13,7 +13,7 @@ model adm {
   email            String             @unique(map: "email_UNIQUE") @db.VarChar(100)
   nome             String             @db.VarChar(200)
   cpf              String             @db.Char(11)
-  pass             String             @db.VarChar(45)
+  pass             String             @db.VarChar(255)
   estabelecimentos estabelecimentos[]
 }
 
@@ -102,7 +102,7 @@ model user {
   id     Int     @id @default(autoincrement())
   name   String  @db.VarChar(200)
   email  String  @unique(map: "email_UNIQUE") @db.VarChar(100)
-  pass   String  @db.VarChar(45)
+  pass   String  @db.VarChar(255)
   bairro String  @db.VarChar(100)
   rua    String  @db.VarChar(100)
   numero String  @db.Char(5)
