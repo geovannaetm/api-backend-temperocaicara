@@ -9,7 +9,6 @@ export const createUserController = async (req, res) => {
       return res.status(400).json({ error: "Preencha os campos obrigatórios." });
     }
 
-    // Criptografa a senha antes de salvar
     const hashedPassword = await bcrypt.hash(pass, 10);
 
     const newUser = await create({
@@ -23,7 +22,14 @@ export const createUserController = async (req, res) => {
 
     return res.status(201).json({
       message: "Usuário criado com sucesso",
-      user: newUser
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        bairro: newUser.bairro,
+        rua: newUser.rua,
+        numero: newUser.numero
+      }
     });
   } catch (error) {
     console.error("Erro ao criar usuário:", error);

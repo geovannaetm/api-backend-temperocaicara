@@ -1,3 +1,4 @@
+
 import { PrismaClient } from "../generated/prisma/index.js";
 const prisma = new PrismaClient();
 
@@ -15,10 +16,18 @@ export const create = async (userData) => {
   });
 };
 
-
 export const getUserByEmail = async (email) => {
-  return await prisma.user.findUnique({ where: { email } });
+  return await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      pass: true // necessário para bcrypt.compare
+    }
+  });
 };
+
 
 export const getUserById = async (id) => {
   return await prisma.user.findUnique({ where: { id: Number(id) } });

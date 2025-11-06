@@ -6,7 +6,16 @@ export const createParceiro = async (data) => {
 };
 
 export const getParceiroByEmail = async (email) => {
-  return await prisma.adm.findUnique({ where: { email } });
+  return await prisma.adm.findUnique({
+    where: { email },
+    select: {
+      id_adm: true,
+      nome: true,
+      email: true,
+      cpf: true,
+      pass: true 
+    }
+  });
 };
 
 export const getParceiroById = async (id) => {

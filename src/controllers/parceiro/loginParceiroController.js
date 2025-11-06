@@ -1,4 +1,4 @@
-import { getParceiroByEmail } from "../../models/parceiroModel.js";
+/* import { getParceiroByEmail } from "../../models/parceiroModel.js";
 
 export const loginParceiroController = async (req, res) => {
   try {
@@ -17,3 +17,4 @@ export const loginParceiroController = async (req, res) => {
     return res.status(500).json({ message: "Erro interno no login." });
   }
 };
+ */

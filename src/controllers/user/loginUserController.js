@@ -1,4 +1,4 @@
-import { getUserByEmail } from "../../models/userModel.js";
+/* import { getUserByEmail } from "../../models/userModel.js";
 
 export const loginUserController = async (req, res) => {
   try {
@@ -15,3 +15,4 @@ export const loginUserController = async (req, res) => {
     res.status(500).json({ error: "Erro ao realizar login." });
   }
 };
+ */
