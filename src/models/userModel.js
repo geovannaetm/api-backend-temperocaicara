@@ -37,6 +37,14 @@ export const updateUser = async (id, data) => {
   return await prisma.user.update({
     where: { id: Number(id) },
     data,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      bairro: true,
+      rua: true,
+      numero: true
+    }
   });
 };
 
