@@ -42,7 +42,8 @@ model estabelecimentos {
   id         Int       @id @default(autoincrement())
   nome       String    @db.VarChar(200)
   decricao   String    @db.VarChar(300)
-  logo_url   String    @db.VarChar(1000)
+  logo_url   String @db.LongText
+ cover_url String? @db.LongText
   adm_id_adm Int
   numero     String    @db.Char(5)
   adm        adm       @relation(fields: [adm_id_adm], references: [id_adm], onDelete: NoAction, onUpdate: NoAction, map: "fk_estabelecimentos_adm1")
@@ -54,7 +55,7 @@ model estabelecimentos {
 
 model imagens {
   id                  Int              @id @default(autoincrement())
-  caminho             String           @db.VarChar(1000)
+  caminho             String @db.LongText
   estabelecimentos_id Int
   estabelecimentos    estabelecimentos @relation(fields: [estabelecimentos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_imagens_estabelecimentos")
 
@@ -88,7 +89,7 @@ model pratos {
   descricao           String             @db.VarChar(300)
   preco               Decimal            @db.Decimal(10, 2)
   categoria           String             @db.VarChar(30)
-  imagem              String             @db.VarChar(500)
+  imagem              String             @db.LongText
   estabelecimentos_id Int
   destaque            Int                @db.TinyInt
   cart_has_pratos     cart_has_pratos[]

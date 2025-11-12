@@ -31,3 +31,11 @@ export async function deletePrato(id) {
     where: { id: Number(id) },
   });
 }
+
+export async function getPratosByEstabelecimento(estabelecimentos_id) {
+  return await prisma.pratos.findMany({
+    where: { estabelecimentos_id: Number(estabelecimentos_id) },
+    include: { estabelecimentos: true },
+    orderBy: { id: "desc" },
+  });
+}
