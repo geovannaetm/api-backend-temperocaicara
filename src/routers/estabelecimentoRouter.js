@@ -30,8 +30,8 @@ router.get("/me/:admId", async (req, res) => {
       est = await prisma.estabelecimentos.create({
         data: {
           nome: "Novo Estabelecimento",
-          decricao: "Descrição padrão",
-          numero: "00000",
+          decricao: "Descrição...",
+          numero: "Nº00",
           logo_url: "",
           cover_url: "",
           adm_id_adm: admId,
