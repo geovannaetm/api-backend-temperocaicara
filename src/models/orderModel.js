@@ -42,3 +42,17 @@ export async function getOrderById(orderId) {
     include: { user: true, order_has_pratos: { include: { pratos: true } } },
   });
 }
+
+export async function deleteOrdersByUser(userId) {
+  return await prisma.$transaction(async (tx) => {
+    // Primeiro apaga os vínculos de pratos com pedidos
+    await tx.order_has_pratos.deleteMany({
+      where: { order: { user_id: Number(userId) } },
+    });
+
+    // Depois apaga os pedidos
+    await tx.order.deleteMany({
+      where: { user_id: Number(userId) },
+    });
+  });
+}

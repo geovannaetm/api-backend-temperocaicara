@@ -9,10 +9,13 @@ import {
 
 export const getOrCreateCartController = async (req, res) => {
   try {
-    const userId = req.user.id; // vem do token
+    console.log("req.user recebido do token:", req.user);
+    const userId = req.user.id;
     const cart = await getOrCreateCartByUser(userId);
+    console.log("Carrinho retornado do Prisma:", cart);
     res.json(cart);
   } catch (error) {
+    console.error("Erro em getOrCreateCartController:", error);
     res.status(500).json({ message: "Erro ao obter/criar carrinho." });
   }
 };
@@ -29,6 +32,8 @@ export const getCartItemsController = async (req, res) => {
 
 export const addItemToCartController = async (req, res) => {
   try {
+     console.log("REQ PARAMS:", req.params);
+    console.log("REQ BODY:", req.body);
     const { cartId } = req.params;
     const { pratos_id, quantidade = 1 } = req.body;
     const item = await addItemToCart(cartId, pratos_id, quantidade);

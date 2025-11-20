@@ -3,6 +3,7 @@ import {
   createOrderFromCartController,
   getOrdersByUserController,
   getOrderByIdController,
+  deleteOrdersByUserController,
 } from "../controllers/order/orderControllers.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
@@ -16,5 +17,7 @@ router.get("/my-orders", authMiddleware, getOrdersByUserController);
 
 // Detalhar um pedido específico
 router.get("/:orderId", authMiddleware, getOrderByIdController);
+
+router.delete("/my-orders", authMiddleware, deleteOrdersByUserController);
 
 export default router;

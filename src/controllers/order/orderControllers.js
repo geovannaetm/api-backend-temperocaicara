@@ -1,4 +1,4 @@
-import { createOrderFromCart, getOrdersByUser, getOrderById } from "../../models/orderModel.js";
+import { createOrderFromCart, getOrdersByUser, getOrderById, deleteOrdersByUser } from "../../models/orderModel.js";
 
 export const createOrderFromCartController = async (req, res) => {
   try {
@@ -29,5 +29,15 @@ export const getOrderByIdController = async (req, res) => {
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: "Erro ao obter pedido." });
+  }
+};
+
+export const deleteOrdersByUserController = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    await deleteOrdersByUser(userId);
+    res.json({ message: "Todos os pedidos foram apagados com sucesso." });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Erro ao apagar pedidos." });
   }
 };
