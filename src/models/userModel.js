@@ -49,7 +49,22 @@ export const updateUser = async (id, data) => {
 };
 
 export const deleteUser = async (id) => {
-  return await prisma.user.delete({ where: { id: Number(id) } });
+   const userId = Number(id);
+
+  // Apaga pedidos
+  await prisma.order.deleteMany({
+    where: { user_id: userId },
+  });
+
+  // Apaga carrinhos 
+  await prisma.cart.deleteMany({
+    where: { user_id: userId },
+  });
+
+  //apagar o usuário
+  return await prisma.user.delete({
+    where: { id: userId },
+  });
 };
 
 export const getAllUsers = async () => {
