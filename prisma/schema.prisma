@@ -20,7 +20,7 @@ model adm {
 model cart {
   id_cart         Int               @id @default(autoincrement())
   user_id         Int
-  user            user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cart_user1")
+  user            user              @relation(fields: [user_id], references: [id], onDelete: Cascade)
   cart_has_pratos cart_has_pratos[]
 
   @@index([user_id], map: "fk_cart_user1_idx")
@@ -65,7 +65,7 @@ model imagens {
 model order {
   id_order         Int                @id @default(autoincrement())
   user_id          Int
-  user             user               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_user1")
+  user             user               @relation(fields: [user_id], references: [id], onDelete: Cascade)
   order_has_pratos order_has_pratos[]
 
   @@index([user_id], map: "fk_order_user1_idx")
@@ -75,7 +75,7 @@ model order_has_pratos {
   order_id_order Int
   quantidade     Int
   pratos_id      Int
-  order          order  @relation(fields: [order_id_order], references: [id_order], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_has_pratos_order1")
+  order          order  @relation(fields: [order_id_order], references: [id_order], onDelete: Cascade)
   pratos         pratos @relation(fields: [pratos_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_has_pratos_pratos1")
 
   @@id([order_id_order, pratos_id])
