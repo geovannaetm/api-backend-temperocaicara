@@ -20,12 +20,12 @@ router.get("/me/:admId", async (req, res) => {
   const admId = parseInt(req.params.admId);
 
   try {
-    // Verifica se já existe
+    
     let est = await prisma.estabelecimentos.findFirst({
       where: { adm_id_adm: admId },
     });
 
-    // Se não existir, cria com dados padrão
+   
     if (!est) {
       est = await prisma.estabelecimentos.create({
         data: {
@@ -45,5 +45,31 @@ router.get("/me/:admId", async (req, res) => {
     res.status(500).json({ message: "Erro interno ao buscar ou criar estabelecimento." });
   }
 });
+
+// buscar pedidos do estabelecimento
+router.get("/:id/pedidos", async (req, res) => {
+  const estId = parseInt(req.params.id);
+
+  try {
+    const pedidos = await prisma.order.findMany({
+      include: {
+        order_has_pratos: {
+          include: { pratos: true }
+        }
+      }
+    });
+
+    // apenas pedidos e pratos do estabelecimento
+    const pedidosDoEst = pedidos.filter(p =>
+      p.order_has_pratos.some(item => item.pratos.estabelecimentos_id === estId)
+    );
+
+    res.json(pedidosDoEst);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro ao buscar pedidos" });
+  }
+});
+
 
 export default router;
